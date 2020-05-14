@@ -5,7 +5,6 @@ import com.vaadin.flow.component.UI;
 import lombok.Setter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
-import ru.artemov.victor.diploma.ui.operations.OperationsView;
 
 public abstract class AbstractViewLogic<T extends AbstractEntity> {
 
@@ -44,15 +43,15 @@ public abstract class AbstractViewLogic<T extends AbstractEntity> {
         view.clearSelection();
     }
 
-    private void setFragmentParameter(String operationId) {
+    private void setFragmentParameter(String id) {
         String fragmentParameter;
-        if (operationId == null || operationId.isEmpty()) {
+        if (id == null || id.isEmpty()) {
             fragmentParameter = "";
         } else {
-            fragmentParameter = operationId;
+            fragmentParameter = id;
         }
 
-        UI.getCurrent().navigate(OperationsView.class, fragmentParameter);
+        UI.getCurrent().navigate(this.view.getClass(), fragmentParameter);
     }
 
     public void save(T item) {
@@ -77,7 +76,7 @@ public abstract class AbstractViewLogic<T extends AbstractEntity> {
         } else {
             setFragmentParameter(item.getId() + "");
         }
-        view.edit(item);
+            view.edit(item);
     }
 
     public void newItem() {
@@ -87,6 +86,6 @@ public abstract class AbstractViewLogic<T extends AbstractEntity> {
     }
 
     public void rowSelected(T item) {
-        edit(item);
+        if(item != null) edit(item);
     }
 }
