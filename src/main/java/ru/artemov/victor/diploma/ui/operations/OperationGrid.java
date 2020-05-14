@@ -1,5 +1,7 @@
 package ru.artemov.victor.diploma.ui.operations;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.web.context.annotation.SessionScope;
 import ru.artemov.victor.diploma.domain.entities.operation.Operation;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
@@ -7,6 +9,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
 
 
+@SessionScope
+@SpringComponent
 public class OperationGrid extends Grid<Operation> {
 
     public OperationGrid() {

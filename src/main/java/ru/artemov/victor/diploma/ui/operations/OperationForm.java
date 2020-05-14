@@ -1,67 +1,48 @@
 package ru.artemov.victor.diploma.ui.operations;
 
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.annotation.SessionScope;
-import ru.artemov.victor.diploma.authentication.CurrentUser;
+import ru.artemov.victor.diploma.authentication.CurrentUserStorage;
 import ru.artemov.victor.diploma.domain.entities.animal.Animal;
 import ru.artemov.victor.diploma.domain.entities.operation.Operation;
 import ru.artemov.victor.diploma.domain.entities.operation.OperationType;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 import ru.artemov.victor.diploma.domain.repositories.AnimalRepository;
 import ru.artemov.victor.diploma.domain.repositories.OperationTypeRepository;
-import ru.artemov.victor.diploma.domain.repositories.UserRepository;
+import ru.artemov.victor.diploma.ui.common.AbstractForm;
 
-import javax.annotation.PostConstruct;
-import java.util.Collection;
 import java.util.List;
 
-/**
- * A form for editing a single product.
- */
-@SessionScope
+
+@Scope("prototype")
 @SpringComponent
-@RequiredArgsConstructor
-public class OperationForm extends Div {
+public class OperationForm extends AbstractForm<Operation> {
 
     private final AnimalRepository animalRepository;
     private final OperationTypeRepository operationTypeRepository;
-    private final UserRepository userRepository;
+    private final CurrentUserStorage currentUserStorage;
 
     private  VerticalLayout content;
-
-    private  TextField operationName;
+    private  TextField name;
     private  ComboBox<User> author;
-    private  DatePicker createdDate;
+    private  DatePicker date;
     private  ComboBox<OperationType> type;
     private  ComboBox<Animal> animal;
-    private  Button delete;
-    @Setter
-    private  OperationViewLogic viewLogic;
-    private  Binder<Operation> binder;
-    private Button save;
-    private Button discard;
-    private Button cancel;
-    private Operation currentTechnologicalOperation;
 
 
-    @PostConstruct
-    public void init() {
+    public OperationForm(AnimalRepository animalRepository, OperationTypeRepository operationTypeRepository,  CurrentUserStorage currentUserStorage) {
+        this.animalRepository = animalRepository;
+        this.operationTypeRepository = operationTypeRepository;
+        this.currentUserStorage = currentUserStorage;
+
         setClassName("operation-form");
 
         content = new VerticalLayout();
@@ -69,20 +50,20 @@ public class OperationForm extends Div {
         content.addClassName("operation-form-content");
         add(content);
 
-        operationName = new TextField("Название операции");
-        operationName.setWidth("100%");
-        operationName.setRequired(true);
-        operationName.setValueChangeMode(ValueChangeMode.EAGER);
-        content.add(operationName);
+        name = new TextField("Название операции");
+        name.setWidth("100%");
+        name.setRequired(true);
+        name.setValueChangeMode(ValueChangeMode.EAGER);
+        content.add(name);
 
         author = new ComboBox<>("Ответственный");
 
-        createdDate = new DatePicker("Дата создания");
+        date = new DatePicker("Дата создания");
 
         final HorizontalLayout horizontalLayout = new HorizontalLayout(author,
-                createdDate);
+                date);
         horizontalLayout.setWidth("100%");
-        horizontalLayout.setFlexGrow(1, author, createdDate);
+        horizontalLayout.setFlexGrow(1, author, date);
         content.add(horizontalLayout);
 
         type = new ComboBox();
@@ -95,76 +76,28 @@ public class OperationForm extends Div {
         animal.setId("animal");
         content.add(animal);
 
-        binder = new BeanValidationBinder<>(Operation.class);
-        binder.forField(author).bind("author");
-        binder.forField(operationName).bind("name");
-        binder.forField(createdDate).bind("date");
-        binder.forField(type).bind("type");
-        binder.bindInstanceFields(this);
-
-        // enable/disable save button while editing
-        binder.addStatusChangeListener(event -> {
-            final boolean isValid = !event.hasValidationErrors();
-            final boolean hasChanges = binder.hasChanges();
-            save.setEnabled(hasChanges && isValid);
-            discard.setEnabled(hasChanges);
-        });
-
-        save = new Button("Сохранить");
-        save.setWidth("100%");
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        save.addClickListener(event -> {
-            if (currentTechnologicalOperation != null
-                    && binder.writeBeanIfValid(currentTechnologicalOperation)) {
-                this.viewLogic.saveProduct(currentTechnologicalOperation);
-            }
-        });
-        save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
-
-        discard = new Button("Сбросить изменения");
-        discard.setWidth("100%");
-        discard.addClickListener(
-                event -> this.viewLogic.editProduct(currentTechnologicalOperation));
-
-        cancel = new Button("Отмена");
-        cancel.setWidth("100%");
-        cancel.addClickListener(event -> this.viewLogic.cancelProduct());
-        cancel.addClickShortcut(Key.ESCAPE);
-        getElement()
-                .addEventListener("keydown", event -> this.viewLogic.cancelProduct())
-                .setFilter("event.key == 'Escape'");
-
-        delete = new Button("Удалить");
-        delete.setWidth("100%");
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR,
-                ButtonVariant.LUMO_PRIMARY);
-        delete.addClickListener(event -> {
-            if (currentTechnologicalOperation != null) {
-                this.viewLogic.deleteProduct(currentTechnologicalOperation);
-            }
-        });
 
         content.add(save, discard, delete, cancel);
         refresh();
     }
 
-    public void editProduct(Operation operation) {
-        if (operation == null) {
-            operation = new Operation();
-        }
-        author.setItems(List.of(operation.getAuthor()));
-        delete.setVisible(!operation.isNew());
-        currentTechnologicalOperation = operation;
-        author.setReadOnly(false);
-        binder.readBean(operation);
-        author.setReadOnly(true);
+    @Override
+    protected void initBinder() {
+        binder = new BeanValidationBinder<>(Operation.class);
+        binder.bindInstanceFields(this);
     }
 
-    public void refresh() {
-        var allowedTypes = userRepository.findByLogin(CurrentUser.get()).map(User::getOperationTypes);
-        type.setItems(operationTypeRepository.findAll().stream().filter(op ->
-             allowedTypes.map(operationTypes -> operationTypes.contains(op)).orElse(false)
-        ));
+    @Override
+    protected void editItem(Operation item) {
+        super.editItem(item);
+    }
+
+    @Override
+    protected void refresh() {
+        var currentUser =  currentUserStorage.getFreshCurrentUser();
+        var allowedTypes = currentUser.getOperationTypes();
+        type.setItems(operationTypeRepository.findAll().stream().filter(allowedTypes::contains));
         animal.setItems(animalRepository.findAll());
+        author.setItems(List.of(currentUser));
     }
 }

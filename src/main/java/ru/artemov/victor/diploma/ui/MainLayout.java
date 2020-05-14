@@ -77,15 +77,15 @@ public class MainLayout extends AppLayout implements RouterLayout {
         addToNavbar(top);
 
         // Navigation items
-        addToDrawer(createMenuLink(OperationsView.class, OperationsView.VIEW_NAME,
+        addToDrawer(createMenuLink(OperationsView.class, "Технологические операции",
                 VaadinIcon.EDIT.create()));
 
         // Navigation items
-        addToDrawer(createMenuLink(UsersView.class, UsersView.VIEW_NAME,
+        addToDrawer(createMenuLink(UsersView.class, "Пользователи",
                 VaadinIcon.USER.create()));
 
         // Navigation items
-        addToDrawer(createMenuLink(AnimalsView.class, AnimalsView.VIEW_NAME,
+        addToDrawer(createMenuLink(AnimalsView.class, "Животные",
                 VaadinIcon.TWITTER.create()));
 
         // Create logout button but don't add it yet; admin view might be added

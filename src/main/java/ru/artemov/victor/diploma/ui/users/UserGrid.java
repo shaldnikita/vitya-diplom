@@ -4,14 +4,14 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.web.context.annotation.SessionScope;
 import ru.artemov.victor.diploma.domain.entities.operation.Operation;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 
-/**
- * Grid of products, handling the visual presentation and filtering of a set of
- * items. This version uses an in-memory data source that is suitable for small
- * data sets.
- */
+
+@SessionScope
+@SpringComponent
 public class UserGrid extends Grid<User> {
 
     public UserGrid() {

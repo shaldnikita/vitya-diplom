@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 
 import java.io.Serializable;
@@ -18,17 +19,12 @@ import javax.validation.constraints.Size;
 @Entity
 @Data
 @EqualsAndHashCode(exclude = "users")
-public class OperationType implements Serializable {
-
-    @NotNull
-    @Id
-    @GeneratedValue
-    private int id = -1;
+public class OperationType extends AbstractEntity {
 
     @Size(min = 2, message = "OperationType name must be at least two characters")
     private String name;
 
-    @ManyToMany(mappedBy = "operationTypes", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "operationTypes", fetch = FetchType.LAZY)
     private Set<User> users;
 
     @Override

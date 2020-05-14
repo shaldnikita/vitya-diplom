@@ -17,6 +17,8 @@ public class BasicAccessControl implements AccessControl {
 
     private final UserRepository userRepository;
 
+    private final CurrentUserStorage currentUserStorage;
+
     @Override
     public boolean signIn(String username, String password) {
         if (username == null || username.isEmpty()) {
@@ -29,7 +31,7 @@ public class BasicAccessControl implements AccessControl {
 
         var maybeUser = userRepository.findByLogin(username);
         if (maybeUser.filter(user -> user.getPassword().equals(password)).isPresent()) {
-            CurrentUser.set(maybeUser.get().getLogin());
+            currentUserStorage.setCurrentUser(maybeUser.get());
             return true;
         } else {
             return false;
@@ -39,14 +41,19 @@ public class BasicAccessControl implements AccessControl {
 
     @Override
     public boolean isUserSignedIn() {
-        return !CurrentUser.get().isEmpty();
+        try {
+            currentUserStorage.getCurrentUser();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean isUserInRole(String role) {
-        if ("admin".equals(role)) {
+        if ("va".equals(role)) {
             // Only the "admin" user is in the "admin" role
-            return getPrincipalName().equals("admin");
+            return getPrincipalName().equals("va");
         }
 
         // All users are in all non-admin roles
@@ -55,7 +62,7 @@ public class BasicAccessControl implements AccessControl {
 
     @Override
     public String getPrincipalName() {
-        return CurrentUser.get();
+        return currentUserStorage.getCurrentUser().getLogin();
     }
 
     @Override

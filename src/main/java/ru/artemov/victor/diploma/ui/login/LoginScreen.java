@@ -49,7 +49,7 @@ public class LoginScreen extends FlexLayout {
 
     private void login(LoginForm.LoginEvent event) {
         if (accessControl.signIn(event.getUsername(), event.getPassword())) {
-            getUI().get().navigate("");
+            getUI().get().navigate("Operations");
         } else {
             event.getSource().setError(true);
         }

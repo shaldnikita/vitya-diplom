@@ -3,6 +3,7 @@ package ru.artemov.victor.diploma.domain.entities.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 import ru.artemov.victor.diploma.domain.entities.operation.Operation;
 import ru.artemov.victor.diploma.domain.entities.operation.OperationType;
 
@@ -17,11 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Data
-public class User {
-
-    @Id
-    @GeneratedValue
-    private int id = -1;
+public class User extends AbstractEntity {
 
     private String firstName;
 
@@ -35,16 +32,12 @@ public class User {
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     private Set<Operation> operations;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinTable(
             name = "user_operation_types",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "operation_type_id"))
     private Set<OperationType> operationTypes;
-
-    public boolean isNew() {
-        return getId() == -1;
-    }
 
     @Override
     public String toString() {

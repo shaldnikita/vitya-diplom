@@ -3,6 +3,7 @@ package ru.artemov.victor.diploma.domain.entities.animal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 import ru.artemov.victor.diploma.domain.entities.operation.Operation;
 
 import javax.persistence.*;
@@ -16,11 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Data
-public class Animal {
-
-    @Id
-    @GeneratedValue
-    private int id = -1;
+public class Animal extends AbstractEntity {
 
     private String name;
 
@@ -28,10 +25,6 @@ public class Animal {
 
     @OneToMany(mappedBy = "animal", fetch = FetchType.EAGER)
     private Set<Operation> operations;
-
-    public boolean isNew() {
-        return getId() == -1;
-    }
 
     @Override
     public String toString() {

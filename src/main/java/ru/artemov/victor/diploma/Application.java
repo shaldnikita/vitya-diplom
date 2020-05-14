@@ -8,13 +8,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import ru.artemov.victor.diploma.authentication.AccessControl;
+import ru.artemov.victor.diploma.domain.entities.animal.Animal;
 import ru.artemov.victor.diploma.domain.entities.operation.OperationType;
 import ru.artemov.victor.diploma.domain.entities.user.User;
+import ru.artemov.victor.diploma.domain.repositories.AnimalRepository;
 import ru.artemov.victor.diploma.domain.repositories.OperationTypeRepository;
 import ru.artemov.victor.diploma.domain.repositories.UserRepository;
 import ru.artemov.victor.diploma.ui.login.LoginScreen;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The entry point of the Spring Boot application.
@@ -30,6 +33,9 @@ public class Application extends SpringBootServletInitializer implements VaadinS
 
     @Autowired
     private OperationTypeRepository operationTypeRepository;
+
+    @Autowired
+    private AnimalRepository animalRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -48,15 +54,19 @@ public class Application extends SpringBootServletInitializer implements VaadinS
 
     @Override
     public void run(String... args) {
-        var user = new User(
-                1, "Viktor", "Artemov", "va", "va", new HashSet<>(), new HashSet<>()
-        );
-        userRepository.save(user);
-
         var operationType = new OperationType(
-                1, "Удой молока", new HashSet<>()
+                "Удой молока", new HashSet<>()
         );
         operationTypeRepository.save(operationType);
+
+        var user = new User(
+                "Viktor", "Artemov", "va", "va", new HashSet<>(), new HashSet<>()
+        );
+        user = userRepository.save(user);
+        user.getOperationTypes().add(operationType);
+        userRepository.save(user);
+
+        animalRepository.save(new Animal("Корова", "123", new HashSet<>()));
 
     }
 }

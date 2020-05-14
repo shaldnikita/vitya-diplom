@@ -1,6 +1,7 @@
 package ru.artemov.victor.diploma.domain.entities.operation;
 
 import lombok.*;
+import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 import ru.artemov.victor.diploma.domain.entities.animal.Animal;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 
@@ -16,12 +17,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Operation implements Serializable {
+public class Operation extends AbstractEntity {
 
-    @NotNull
-    @Id
-    @GeneratedValue
-    private int id = -1;
 
     @NotNull
     private String name;
@@ -43,7 +40,7 @@ public class Operation implements Serializable {
     @JoinColumn(name="animal_id", nullable=false)
     private Animal animal;
 
-    public boolean isNew() {
-        return getId() == -1;
+    public Operation(User author) {
+        this.author = author;
     }
 }
