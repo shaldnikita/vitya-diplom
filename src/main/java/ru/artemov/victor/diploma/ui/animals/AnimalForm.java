@@ -21,6 +21,7 @@ public class AnimalForm extends AbstractForm<Animal> {
 
 
     public AnimalForm() {
+        super();
         setClassName("animal-form");
 
         content = new VerticalLayout();

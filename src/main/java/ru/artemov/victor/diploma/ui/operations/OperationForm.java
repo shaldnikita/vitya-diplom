@@ -39,6 +39,7 @@ public class OperationForm extends AbstractForm<Operation> {
 
 
     public OperationForm(AnimalRepository animalRepository, OperationTypeRepository operationTypeRepository,  CurrentUserStorage currentUserStorage) {
+        super();
         this.animalRepository = animalRepository;
         this.operationTypeRepository = operationTypeRepository;
         this.currentUserStorage = currentUserStorage;

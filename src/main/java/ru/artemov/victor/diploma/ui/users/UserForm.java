@@ -31,6 +31,7 @@ public class UserForm extends AbstractForm<User> {
 
 
     public UserForm(OperationTypeRepository operationTypeRepository) {
+        super();
         this.operationTypeRepository = operationTypeRepository;
 
         setClassName("user-form");
