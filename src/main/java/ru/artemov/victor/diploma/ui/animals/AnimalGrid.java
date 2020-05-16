@@ -4,11 +4,11 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.context.annotation.Scope;
 import ru.artemov.victor.diploma.domain.entities.animal.Animal;
 
 @SpringComponent
-@SessionScope
+@Scope("prototype")
 public class AnimalGrid extends Grid<Animal> {
 
     public AnimalGrid() {

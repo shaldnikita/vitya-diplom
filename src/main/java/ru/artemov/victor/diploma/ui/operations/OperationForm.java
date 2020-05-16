@@ -20,8 +20,8 @@ import ru.artemov.victor.diploma.ui.common.AbstractForm;
 
 import java.util.List;
 
-@Scope("prototype")
 @SpringComponent
+@Scope("prototype")
 public class OperationForm extends AbstractForm<Operation> {
 
     private final AnimalRepository animalRepository;

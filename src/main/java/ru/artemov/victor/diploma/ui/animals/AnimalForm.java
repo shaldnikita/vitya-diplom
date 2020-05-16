@@ -5,12 +5,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.context.annotation.Scope;
 import ru.artemov.victor.diploma.domain.entities.animal.Animal;
 import ru.artemov.victor.diploma.ui.common.AbstractForm;
 
 @SpringComponent
-@UIScope
+@Scope("prototype")
 public class AnimalForm extends AbstractForm<Animal> {
 
     private final VerticalLayout content;
