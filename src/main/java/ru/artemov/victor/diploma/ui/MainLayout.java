@@ -23,7 +23,6 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,6 @@ import javax.annotation.PostConstruct;
 @CssImport(value = "styles/menu-buttons.css", themeFor = "vaadin-button")
 @Route
 @RequiredArgsConstructor
-@UIScope
 public class MainLayout extends AppLayout implements RouterLayout {
 
     private final AccessControl accessControl;

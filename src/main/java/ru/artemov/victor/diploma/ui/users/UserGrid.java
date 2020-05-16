@@ -3,10 +3,8 @@ package ru.artemov.victor.diploma.ui.users;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.web.context.annotation.SessionScope;
-import ru.artemov.victor.diploma.domain.entities.operation.Operation;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 
 
@@ -20,14 +18,12 @@ public class UserGrid extends Grid<User> {
 
         addColumn(User::getFirstName).setHeader("Имя")
                 .setFlexGrow(20)
-                .setSortable(true)
-                .setKey("firstName");
+                .setSortable(true);
 
         addColumn(User::getSecondName)
                 .setHeader("Фамилия")
                 .setFlexGrow(20)
-                .setSortable(true)
-                .setKey("secondName");
+                .setSortable(true);
 
 
         addColumn(User::getLogin)

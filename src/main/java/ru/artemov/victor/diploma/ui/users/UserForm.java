@@ -7,13 +7,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.context.annotation.Scope;
 import ru.artemov.victor.diploma.domain.entities.operation.OperationType;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 import ru.artemov.victor.diploma.domain.repositories.OperationTypeRepository;
 import ru.artemov.victor.diploma.ui.common.AbstractForm;
-import ru.artemov.victor.diploma.ui.common.AbstractViewLogic;
 
 @SpringComponent
 @Scope("prototype")
@@ -76,6 +74,12 @@ public class UserForm extends AbstractForm<User> {
     protected void initBinder() {
         binder = new BeanValidationBinder<>(User.class);
         binder.bindInstanceFields(this);
+        binder.addStatusChangeListener(event -> {
+            final boolean isValid = !event.hasValidationErrors();
+            final boolean hasChanges = binder.hasChanges();
+            save.setEnabled(hasChanges && isValid);
+            discard.setEnabled(hasChanges);
+        });
     }
 
     public void refresh() {

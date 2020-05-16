@@ -9,6 +9,8 @@ import com.vaadin.flow.data.binder.Binder;
 import lombok.Setter;
 import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 
+import javax.annotation.PostConstruct;
+
 public abstract class AbstractForm<T extends AbstractEntity> extends Div {
 
     @Setter
@@ -62,22 +64,15 @@ public abstract class AbstractForm<T extends AbstractEntity> extends Div {
             }
         });
 
-        initBinder();
-        binder.addStatusChangeListener(event -> {
-            final boolean isValid = !event.hasValidationErrors();
-            final boolean hasChanges = binder.hasChanges();
-            save.setEnabled(hasChanges && isValid);
-            discard.setEnabled(hasChanges);
-        });
-
     }
 
+    @PostConstruct
     protected abstract void initBinder();
 
     protected abstract void refresh();
 
     protected void editItem(T item) {
-        delete.setVisible(!item.isNew());
+        delete.setVisible(item != null && !item.isNew());
         currentItem = item;
         binder.readBean(item);
     }

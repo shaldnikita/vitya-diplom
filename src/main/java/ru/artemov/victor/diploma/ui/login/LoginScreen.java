@@ -6,8 +6,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
 import ru.artemov.victor.diploma.authentication.AccessControl;
 
@@ -19,8 +17,6 @@ import javax.annotation.PostConstruct;
 @Route("Login")
 @PageTitle("Login")
 @CssImport("styles/shared-styles.css")
-@SpringComponent
-@UIScope
 @RequiredArgsConstructor
 public class LoginScreen extends FlexLayout {
 

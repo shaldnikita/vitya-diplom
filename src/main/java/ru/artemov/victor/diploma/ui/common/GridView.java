@@ -27,18 +27,21 @@ public abstract class GridView<T extends AbstractEntity> extends AbstractView<T>
 
     private JpaRepository<T, Integer> repository;
 
+    protected final DataProvider<T, Void> dataProvider;
 
     public GridView(DataProvider<T, Void> dataProvider, AbstractViewLogic<T> viewLogic, Grid<T> grid, AbstractForm<T> form, JpaRepository<T, Integer> repository) {
-        super(dataProvider, viewLogic);
+        super(viewLogic);
         viewLogic.setView(this);
         form.setViewLogic(viewLogic);
+        this.dataProvider = dataProvider;
         this.grid = grid;
         this.form = form;
         this.repository = repository;
 
-        grid.setDataProvider(this.dataProvider);
+        //grid.setDataProvider(this.dataProvider);
+        grid.setItems(repository.findAll());
         grid.asSingleSelect().addValueChangeListener(
-                event -> viewLogic.rowSelected(event.getValue()));
+                event -> viewLogic.edit(event.getValue()));
 
         viewLogic.setView(this);
         form.setViewLogic(viewLogic);
@@ -70,13 +73,13 @@ public abstract class GridView<T extends AbstractEntity> extends AbstractView<T>
 
     public void update(T item) {
         repository.save(item);
-        dataProvider.refreshAll();
+        grid.setItems(repository.findAll());
     }
 
 
     public void remove(T item) {
         repository.delete(item);
-        dataProvider.refreshAll();
+        grid.setItems(repository.findAll());
     }
 
 

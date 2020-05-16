@@ -9,7 +9,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 import ru.artemov.victor.diploma.authentication.CurrentUserStorage;
 import ru.artemov.victor.diploma.domain.entities.animal.Animal;
 import ru.artemov.victor.diploma.domain.entities.operation.Operation;
@@ -20,7 +19,6 @@ import ru.artemov.victor.diploma.domain.repositories.OperationTypeRepository;
 import ru.artemov.victor.diploma.ui.common.AbstractForm;
 
 import java.util.List;
-
 
 @Scope("prototype")
 @SpringComponent
@@ -86,11 +84,6 @@ public class OperationForm extends AbstractForm<Operation> {
     protected void initBinder() {
         binder = new BeanValidationBinder<>(Operation.class);
         binder.bindInstanceFields(this);
-    }
-
-    @Override
-    protected void editItem(Operation item) {
-        super.editItem(item);
     }
 
     @Override

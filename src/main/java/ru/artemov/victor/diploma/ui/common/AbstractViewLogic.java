@@ -84,8 +84,4 @@ public abstract class AbstractViewLogic<T extends AbstractEntity> {
         setFragmentParameter("new");
         view.edit(getNewItem());
     }
-
-    public void rowSelected(T item) {
-        if(item != null) edit(item);
-    }
 }
