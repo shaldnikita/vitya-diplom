@@ -15,6 +15,8 @@ import com.vaadin.flow.router.OptionalParameter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 
+import javax.annotation.PostConstruct;
+
 public abstract class GridView<T extends AbstractEntity> extends AbstractView<T> {
 
     protected Grid<T> grid;
@@ -39,7 +41,6 @@ public abstract class GridView<T extends AbstractEntity> extends AbstractView<T>
         this.repository = repository;
 
         //grid.setDataProvider(this.dataProvider);
-        grid.setItems(repository.findAll());
         grid.asSingleSelect().addValueChangeListener(
                 event -> viewLogic.edit(event.getValue()));
 
@@ -63,6 +64,11 @@ public abstract class GridView<T extends AbstractEntity> extends AbstractView<T>
         filter.addFocusShortcut(Key.KEY_F, KeyModifier.CONTROL);
     }
 
+    @PostConstruct
+    protected void fillGrid() {
+        grid.setItems(repository.findAll());
+    }
+
     public void showNotification(String msg) {
         Notification.show(msg);
     }
@@ -73,13 +79,13 @@ public abstract class GridView<T extends AbstractEntity> extends AbstractView<T>
 
     public void update(T item) {
         repository.save(item);
-        grid.setItems(repository.findAll());
+        fillGrid();
     }
 
 
     public void remove(T item) {
         repository.delete(item);
-        grid.setItems(repository.findAll());
+        fillGrid();
     }
 
 
