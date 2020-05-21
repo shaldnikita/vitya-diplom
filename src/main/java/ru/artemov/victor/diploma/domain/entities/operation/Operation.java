@@ -1,16 +1,19 @@
 package ru.artemov.victor.diploma.domain.entities.operation;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 import ru.artemov.victor.diploma.domain.entities.animal.Animal;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,7 +21,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Entity
 public class Operation extends AbstractEntity {
-
 
     @NotNull
     private String name;

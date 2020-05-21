@@ -7,18 +7,18 @@ import lombok.NoArgsConstructor;
 import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 import ru.artemov.victor.diploma.domain.entities.user.User;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Data
 @EqualsAndHashCode(exclude = "users")
+@Table(
+        uniqueConstraints = @UniqueConstraint(name = "name_udx", columnNames = "name")
+)
 public class OperationType extends AbstractEntity {
 
     @Size(min = 2, message = "OperationType name must be at least two characters")

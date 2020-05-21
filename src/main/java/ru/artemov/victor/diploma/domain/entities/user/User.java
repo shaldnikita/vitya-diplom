@@ -18,6 +18,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Data
+@Table(
+        uniqueConstraints = @UniqueConstraint(name = "login_udx", columnNames = "login")
+)
 public class User extends AbstractEntity {
 
     private String firstName;

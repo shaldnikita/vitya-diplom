@@ -16,8 +16,8 @@ import ru.artemov.victor.diploma.domain.repositories.OperationTypeRepository;
 import ru.artemov.victor.diploma.domain.repositories.UserRepository;
 import ru.artemov.victor.diploma.ui.login.LoginScreen;
 
+import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * The entry point of the Spring Boot application.
@@ -57,7 +57,6 @@ public class Application extends SpringBootServletInitializer implements VaadinS
         var operationType = new OperationType(
                 "Удой молока", new HashSet<>()
         );
-        operationTypeRepository.save(operationType);
 
         var user = new User(
                 "Viktor", "Artemov", "va", "va", new HashSet<>(), new HashSet<>()
@@ -66,7 +65,7 @@ public class Application extends SpringBootServletInitializer implements VaadinS
         user.getOperationTypes().add(operationType);
         userRepository.save(user);
 
-        animalRepository.save(new Animal("Корова", "123", new HashSet<>()));
+        animalRepository.save(new Animal("Корова",LocalDate.now(), LocalDate.now(), 100, LocalDate.now(), "123", new HashSet<>()));
 
     }
 }

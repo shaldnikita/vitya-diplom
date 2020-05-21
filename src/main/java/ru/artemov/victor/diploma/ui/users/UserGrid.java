@@ -18,18 +18,21 @@ public class UserGrid extends Grid<User> {
 
         addColumn(User::getFirstName).setHeader("Имя")
                 .setFlexGrow(20)
+                .setKey("firstName")
                 .setSortable(true);
 
         addColumn(User::getSecondName)
                 .setHeader("Фамилия")
                 .setFlexGrow(20)
+                .setKey("secondName")
                 .setSortable(true);
 
 
         addColumn(User::getLogin)
                 .setHeader("Логин")
                 .setFlexGrow(12)
-                .setKey("login");
+                .setKey("login")
+                .setSortable(true);
 
 
         // If the browser window size changes, check if all columns fit on

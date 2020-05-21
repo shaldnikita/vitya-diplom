@@ -12,10 +12,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.router.Route;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import ru.artemov.victor.diploma.domain.entities.operation.OperationType;
 import ru.artemov.victor.diploma.domain.repositories.OperationTypeRepository;
 
@@ -27,12 +25,11 @@ import java.util.ArrayList;
  * <p>
  * Allows CRUD operations for the book categories.
  */
-@SpringComponent
-@UIScope
 @RequiredArgsConstructor
+@Route(value = "Categories", layout = MainLayout.class)
 public class AdminView extends VerticalLayout {
 
-    public static final String VIEW_NAME = "Admin";
+    public static final String VIEW_NAME = "Администратор";
 
     private final OperationTypeRepository operationTypeRepository;
 

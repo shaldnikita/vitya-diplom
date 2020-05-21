@@ -7,6 +7,7 @@ import ru.artemov.victor.diploma.domain.entities.AbstractEntity;
 import ru.artemov.victor.diploma.domain.entities.operation.Operation;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -17,9 +18,21 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Data
+@Table(
+        uniqueConstraints = @UniqueConstraint(name = "unique_identifier_udx", columnNames = "uniqueIdentifier")
+)
 public class Animal extends AbstractEntity {
 
     private String name;
+
+    private LocalDate birthday;
+
+    private LocalDate coming;
+
+    private double weight;
+
+    private LocalDate lastWeightDate;
+
 
     private String uniqueIdentifier;
 

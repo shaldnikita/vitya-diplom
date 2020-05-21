@@ -81,10 +81,6 @@ public class MainLayout extends AppLayout implements RouterLayout {
                 VaadinIcon.EDIT.create()));
 
         // Navigation items
-        addToDrawer(createMenuLink(UsersView.class, "Пользователи",
-                VaadinIcon.USER.create()));
-
-        // Navigation items
         addToDrawer(createMenuLink(AnimalsView.class, "Животные",
                 VaadinIcon.TWITTER.create()));
 
@@ -119,15 +115,18 @@ public class MainLayout extends AppLayout implements RouterLayout {
         return routerButton;
     }
 
-    private void registerAdminViewIfApplicable(AccessControl accessControl) {
+    private void registerAdminViewsIfApplicable(AccessControl accessControl) {
         // register the admin view dynamically only for any admin user logged in
-        if (accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME)
-                && !RouteConfiguration.forSessionScope()
-                        .isRouteRegistered(AdminView.class)) {
-            RouteConfiguration.forSessionScope().setRoute(AdminView.VIEW_NAME,
-                    AdminView.class, MainLayout.class);
-            // as logout will purge the session route registry, no need to
-            // unregister the view on logout
+        if (accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME)) {
+            if(!RouteConfiguration.forSessionScope()
+                    .isRouteRegistered(AdminView.class)) {
+                RouteConfiguration.forSessionScope().setRoute("Категории",
+                        AdminView.class, MainLayout.class);
+            }
+            if(!RouteConfiguration.forSessionScope()
+                    .isRouteRegistered(UsersView.class))
+                RouteConfiguration.forSessionScope().setRoute("Пользователи",
+                        UsersView.class, MainLayout.class);
         }
     }
 
@@ -142,12 +141,15 @@ public class MainLayout extends AppLayout implements RouterLayout {
         if (accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME)) {
 
             // Create extra navigation target for admins
-            registerAdminViewIfApplicable(accessControl);
+            registerAdminViewsIfApplicable(accessControl);
 
             // The link can only be created now, because the RouterLink checks
             // that the target is valid.
-            addToDrawer(createMenuLink(AdminView.class, AdminView.VIEW_NAME,
+            addToDrawer(createMenuLink(AdminView.class, "Категории",
                     VaadinIcon.DOCTOR.create()));
+
+            addToDrawer(createMenuLink(UsersView.class, "Пользователи",
+                    VaadinIcon.USER.create()));
         }
 
         // Finally, add logout button for all users
