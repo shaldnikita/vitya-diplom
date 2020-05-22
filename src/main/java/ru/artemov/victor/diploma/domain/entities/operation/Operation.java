@@ -42,6 +42,10 @@ public class Operation extends AbstractEntity {
     @JoinColumn(name="animal_id", nullable=false)
     private Animal animal;
 
+    private LocalDate weightDate;
+
+    private Double weight;
+
     public Operation(User author) {
         this.author = author;
     }

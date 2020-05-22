@@ -4,6 +4,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -35,6 +36,10 @@ public class OperationForm extends AbstractForm<Operation> {
     private  ComboBox<OperationType> type;
     private  ComboBox<Animal> animal;
 
+    private DatePicker weightDate;
+
+    private NumberField weight;
+
 
     public OperationForm(AnimalRepository animalRepository, OperationTypeRepository operationTypeRepository,  CurrentUserStorage currentUserStorage) {
         super();
@@ -65,9 +70,27 @@ public class OperationForm extends AbstractForm<Operation> {
         horizontalLayout.setFlexGrow(1, author, date);
         content.add(horizontalLayout);
 
+        weight = new NumberField("Вес");
+        weightDate = new DatePicker("Дата взвешивания");
+
+        var weightFields = new HorizontalLayout(weight, weightDate);
+        weightFields.setWidth("100%");
+        weightFields.setFlexGrow(1, weight, weightDate);
+
         type = new ComboBox();
         type.setLabel("Категория");
         type.setId("type");
+        type.addValueChangeListener(value -> {
+            if(value.getValue() != null && value.getValue().getName().equals("Взвешивание")) {
+                content.remove(save, discard, delete, cancel);
+                content.add(weightFields);
+                content.add(save, discard, delete, cancel);
+            } else {
+                if(content.getChildren().anyMatch(c -> c == weightFields)) {
+                    content.remove(weightFields);
+                }
+            }
+        });
         content.add(type);
 
         animal = new ComboBox();
@@ -84,6 +107,8 @@ public class OperationForm extends AbstractForm<Operation> {
     protected void initBinder() {
         binder = new BeanValidationBinder<>(Operation.class);
         binder.bindInstanceFields(this);
+        binder.forField(weight).bind("weight");
+        binder.forField(weightDate).bind("weightDate");
     }
 
     @Override
